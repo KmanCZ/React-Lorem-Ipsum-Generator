@@ -1,5 +1,6 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, Dispatch, FormEvent, useState } from "react";
 import { loremIpsum } from "lorem-ipsum";
+import parse from "html-react-parser";
 
 function App() {
   return (
@@ -11,21 +12,44 @@ function App() {
 }
 
 function Generator() {
+  const [lorem, setLorem] = useState("");
+
+  return (
+    <>
+      <Form setLorem={setLorem} />
+      <Display lorem={lorem} />
+    </>
+  );
+}
+
+//Props for form component
+interface FormInterface {
+  setLorem: Dispatch<React.SetStateAction<string>>;
+}
+
+function Form(props: FormInterface) {
   const [count, setCount] = useState(5);
   const [units, setUnits] = useState("paragraphs");
 
+  //saves count if value if number and bigger than zero
   const handleNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     !isNaN(parseInt(e.target.value)) &&
       parseInt(e.target.value) > 0 &&
       setCount(parseInt(e.target.value));
   };
 
+  //saves units from radio button
   const handleRadioChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUnits(e.target.value);
   };
 
+  //generates lorem based on input from form
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (units === "paragraphs" || units === "sentences" || units === "words") {
+      const generatedLorem = loremIpsum({ format: "html", units, count });
+      props.setLorem(generatedLorem);
+    }
   };
 
   return (
@@ -76,6 +100,16 @@ function Generator() {
       <button type="submit">Generate</button>
     </form>
   );
+}
+
+//props for display
+interface DisplayInterface {
+  lorem: string;
+}
+
+//takes generated lorem and parses it to a html
+function Display(props: DisplayInterface) {
+  return <section>{parse(props.lorem)}</section>;
 }
 
 export default App;
