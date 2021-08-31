@@ -5,7 +5,7 @@ import parse from "html-react-parser";
 function App() {
   return (
     <main>
-      <h1>React Lorem Ipsum Generator</h1>
+      <h1>Lorem Ipsum Generator</h1>
       <Generator />
     </main>
   );
