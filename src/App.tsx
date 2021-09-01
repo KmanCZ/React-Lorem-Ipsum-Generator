@@ -15,10 +15,10 @@ function Generator() {
   const [lorem, setLorem] = useState("");
 
   return (
-    <>
+    <div className="generator">
       <Form setLorem={setLorem} />
       <Display lorem={lorem} />
-    </>
+    </div>
   );
 }
 
@@ -54,7 +54,7 @@ function Form(props: FormInterface) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <section>
+      <section className="number-input">
         <input
           type="number"
           name="count"
@@ -62,7 +62,7 @@ function Form(props: FormInterface) {
           onChange={handleNumberChange}
         />
       </section>
-      <section>
+      <section className="radio-input">
         <div>
           <input
             type="radio"
@@ -109,7 +109,9 @@ interface DisplayInterface {
 
 //takes generated lorem and parses it to a html
 function Display(props: DisplayInterface) {
-  return <section>{parse(props.lorem)}</section>;
+  return (
+    <section className={props.lorem && "display"}>{parse(props.lorem)}</section>
+  );
 }
 
 export default App;
